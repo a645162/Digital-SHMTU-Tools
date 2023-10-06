@@ -69,6 +69,9 @@ def parse_elem_tbody(elem_tbody):
 
 
 def get_bill(driver, save_path):
+    print("-" * 50)
+    print("开始获取账单！")
+
     driver.get(url_ecard)
     driver.get(r"https://ecard.shmtu.edu.cn/epay/consume/query?pageNo=1&tabNo=1")
 
@@ -95,7 +98,7 @@ def get_bill(driver, save_path):
     )
     list_consumption.extend(parse_elem_tbody(elem_tbody))
 
-    print("第1页处理完毕！\n继续处理后续页面！")
+    print("第1页处理完毕！")
     for i in range(2, total_page + 1):
         print("正在处理第", i, "页")
         driver.get(
@@ -135,4 +138,5 @@ def get_bill(driver, save_path):
     for data in list_consumption:
         writer.writerow(data)
     csv_file.close()
-    print("文件写出完毕！")
+    print("账单写出完毕！")
+    print("-" * 50)

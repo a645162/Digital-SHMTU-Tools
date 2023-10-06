@@ -21,6 +21,12 @@ workdir_path = os.path.join(current_path, "workdir")
 path.create_dir_if_not_exist(workdir_path)
 
 if __name__ == "__main__":
+    print("=" * 50)
+    print("上海海事大学的一些小工具！")
+    print("github:")
+    print(r"https://github.com/a645162/Digital-SHMTU-Tools")
+    print("=" * 50)
+
     option = webdriver.ChromeOptions()
     # option.add_argument('headless')
 

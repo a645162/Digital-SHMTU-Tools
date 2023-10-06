@@ -6,6 +6,9 @@ url_portal = r"https://portal.shmtu.edu.cn/"
 
 
 def login(driver, user_id="", user_pwd=""):
+    print('-' * 50)
+    print("开始登录！")
+
     driver.get(url_portal)
 
     elem_id = driver.find_element(By.CSS_SELECTOR, "#username")
@@ -17,3 +20,6 @@ def login(driver, user_id="", user_pwd=""):
     while driver.current_url.find('https://portal.shmtu.edu.cn/node') == -1:
         # 没有成功跳转，那就等待1秒后继续检测
         time.sleep(1)
+
+    print("登录流程结束！")
+    print("-" * 50)
