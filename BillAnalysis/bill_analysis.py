@@ -2,11 +2,13 @@ import os
 import csv
 import time
 
+import Debug.debug_path
 from Database.Bill import ReadDatabase
 
-csv_path = r"H:\Dev\github\Digital-SHMTU-Tools\workdir\bills\consumption_2023-10-06_16-36-19.csv"
-
 field_dict = ReadDatabase.read_field()
+type_dict = ReadDatabase.read_type()
+position_dict = ReadDatabase.read_position()
+schedule_list = ReadDatabase.read_schedule()
 
 
 # file_name = os.path.basename(csv_path)
@@ -70,5 +72,5 @@ def analysis_csv(path):
 
 
 if __name__ == '__main__':
-    # analysis_csv(csv_path)
+    analysis_csv(Debug.debug_path.csv_path)
     print(field_dict)

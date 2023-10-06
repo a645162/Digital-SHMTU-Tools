@@ -38,7 +38,19 @@ def read_position():
 
 
 if __name__ == '__main__':
+    print("-" * 50)
+    print("read_field")
     print(read_field())
+
+    print("-" * 50)
+    print("read_schedule")
     print(read_schedule())
+
+    print("-" * 50)
+    print("read_type")
     print(read_type())
+
+    print("-" * 50)
+    print("read_position")
     print(read_position())
+    print("-" * 50)
