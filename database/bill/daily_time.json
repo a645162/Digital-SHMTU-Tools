@@ -1,0 +1,24 @@
+[
+  {
+    "valid_date": {
+      "start": "2019-9-1",
+      "end": "now"
+    },
+    "breakfast": {
+      "start": "6:30",
+      "end": "8:30"
+    },
+    "lunch": {
+      "start": "10:45",
+      "end": "12:30"
+    },
+    "dinner": {
+      "start": "16:30",
+      "end": "18:15"
+    },
+    "midnight_snack": {
+      "start": "18:15",
+      "end": "21:00"
+    }
+  }
+]

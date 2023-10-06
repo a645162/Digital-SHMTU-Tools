@@ -20,6 +20,16 @@ Some tools for shmtu student!
 
 可以用Excel/WPS直接打开，或者可以期待一下我的分析工具！
 
+### 安装要求
+
+```
+selenium>=4.0.0
+webdriver_manager>=4.0.0
+```
+
+程序需要 selenium 分析网页，
+需要webdriver_manager自动获取webdriver！
+
 # 画个饼
 
 - 准备做一个账单分析工具！
