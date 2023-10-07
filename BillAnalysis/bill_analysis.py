@@ -46,10 +46,6 @@ def read_csv_data(path):
 def analysis_csv(path):
     list_consumption = read_csv_data(path)
 
-    consumption_classify = {
-        "other": []
-    }
-
     for record in list_consumption:
         if len(record) != 8:
             print("!!!错误:")
@@ -102,7 +98,12 @@ def analysis_csv(path):
 
 def handle_canteen(canteen_list, save_path):
     # 对食堂问题做进一步分类
-    pass
+    new_canteen_list = []
+    for canteen_record in canteen_list:
+        new_canteen_record = dict(canteen_record).copy()
+        # TODO:在这里进行分类
+
+        new_canteen_list.append(new_canteen_record)
 
 
 def judge_bath_record(record1, record2):
