@@ -4,13 +4,14 @@ import time
 import datetime
 
 import Debug.debug_path
-from Database.Bill import ReadDatabase, SaveJson, bath_config, output_config
+from Database.Bill import ReadDatabase, SaveJson
+from Database.Bill import canteen_config, bath_config, output_config
 from Utils import path
 
 field_dict = dict(ReadDatabase.read_field())
 type_dict = dict(ReadDatabase.read_type())
 position_dict = dict(ReadDatabase.read_position())
-schedule_list = list(ReadDatabase.read_schedule())
+schedule_dict_list = list(ReadDatabase.read_schedule())
 
 classify_dict = {
     "other": []
@@ -62,16 +63,16 @@ def analysis_csv(path):
         )
 
         record_dict = {
-            "str_date": record[0],
-            "str_time": record[1],
-            "name": record[2],
-            "num": record[3],
-            "target": record[4],
-            "str_money": record[5],
-            "pay_type": record[6],
-            "status": record[7],
+            "str_date": record[0].strip(),
+            "str_time": record[1].strip(),
+            "name": record[2].strip(),
+            "num": record[3].strip(),
+            "target": record[4].strip(),
+            "str_money": record[5].strip(),
+            "pay_type": record[6].strip(),
+            "status": record[7].strip(),
             "datetime": date_time_data,
-            "money": float(record[5])
+            "money": float(record[5].strip())
         }
         print(record_dict)
 
@@ -96,14 +97,54 @@ def analysis_csv(path):
             # print(keywords_dict)
 
 
-def handle_canteen(canteen_list, save_path):
+def handle_canteen():
     # 对食堂问题做进一步分类
     new_canteen_list = []
-    for canteen_record in canteen_list:
+    for canteen_record in classify_dict["canteen"]:
         new_canteen_record = dict(canteen_record).copy()
-        # TODO:在这里进行分类
+
+        # 食堂分类
+        text = canteen_record[position_dict["field"]]
+        keywords_dict = dict(position_dict["keywords"])
+        found = False
+        for keyword in keywords_dict.keys():
+            if text.find(keyword) != -1:
+                new_canteen_record["position"] = keywords_dict[keyword]["position"]
+                new_canteen_record["room"] = keywords_dict[keyword]["room"]
+                found = True
+                break
+        if not found:
+            new_canteen_record["position"] = "未知"
+            new_canteen_record["room"] = "未知"
+            print(text, "未知位置，请在github反馈给开发者！")
+
+        # 早中晚分类
+        found = False
+        for schedule_dict in schedule_dict_list:
+            valid_date_dict = dict(schedule_dict["valid_date"])
+            if canteen_config.date_is_in_range(
+                    new_canteen_record["str_date"],
+                    valid_date_dict["start_date"],
+                    valid_date_dict["end_date"]
+            ):
+                timetable_dict = dict(schedule_dict["timetable"])
+                for timetable_key in timetable_dict.keys():
+                    current_timetable = dict(timetable_dict[timetable_key])
+                    if canteen_config.time_is_in_range(
+                            new_canteen_record["str_time"],
+                            current_timetable["start_time"],
+                            current_timetable["end_time"]
+                    ):
+                        new_canteen_record["timetable"] = current_timetable["name"]
+                        found = True
+                        break
+                if found:
+                    break
 
         new_canteen_list.append(new_canteen_record)
+        classify_dict["canteen"] = new_canteen_list
+
+    print("食堂处理完毕！")
 
 
 def judge_bath_record(record1, record2):
@@ -171,18 +212,20 @@ def handle_bath():
     print("bath处理完毕！")
 
 
-def output_classify_to_csv(save_dir):
+def output_classify_to_csv(save_dir, time_str):
     print("=" * 50)
-    now = datetime.datetime.now()
-    date_time = now.strftime("%Y-%m-%d_%H-%M-%S")
+
     print("开始输出！")
-    print("当前时间 ", date_time)
-    save_time_dir = os.path.join(save_dir, date_time)
+    save_time_dir = os.path.join(save_dir, time_str)
+
+    not_output = []
 
     for key in classify_dict.keys():
+        if key in not_output:
+            continue
         print("-" * 50)
         print("输出分类 {} :".format(key))
-        file_name = "classify_{}_{}.csv".format(key, date_time)
+        file_name = "classify_{}_{}.csv".format(key, time_str)
         file_path = os.path.join(save_time_dir, file_name)
         path.create_dir_if_not_exist(save_time_dir)
         print("准备写出到文件：", file_path)
@@ -213,6 +256,45 @@ def output_classify_to_csv(save_dir):
     print("=" * 50)
 
 
+def output_canteen(save_dir, time_str):
+    print("-" * 50)
+    save_time_dir = os.path.join(save_dir, time_str)
+    print("输出分类 食堂消费清单")
+    file_name = "canteen_{}.csv".format(time_str)
+    file_path = os.path.join(save_time_dir, file_name)
+    path.create_dir_if_not_exist(save_time_dir)
+    print("准备写出到文件：", file_path)
+    csv_file = \
+        open(file_path, 'w', newline='', encoding=output_config.encodings)
+
+    writer = csv.writer(csv_file)
+    writer.writerow(
+        [
+            "日期",
+            "时间",
+            "地点",
+            "食堂名",
+            "价格",
+            "用餐时段"
+        ]
+    )
+    total_money = 0
+    for classify_data in classify_dict["canteen"]:
+        if classify_data is not None:
+            data = [
+                classify_data["str_date"],
+                classify_data["str_time"],
+                classify_data["position"],
+                classify_data["room"],
+                classify_data["str_money"],
+                classify_data["timetable"]
+            ]
+            total_money += classify_data["money"]
+            writer.writerow(data)
+    csv_file.close()
+    print("食堂消费总金额为{}".format(round(total_money, 2)))
+
+
 if __name__ == '__main__':
     analysis_csv(Debug.debug_path.csv_path)
     print(field_dict)
@@ -220,12 +302,18 @@ if __name__ == '__main__':
     # 合并相邻的洗浴记录
     handle_bath()
 
-    handle_canteen(
-        classify_dict["canteen"],
-        Debug.debug_path.classify_dir_path
-    )
+    handle_canteen()
 
+    now = datetime.datetime.now()
+    date_time = now.strftime("%Y-%m-%d_%H-%M-%S")
+    print("当前时间 ", date_time)
     # 输出每一个分类到csv文件
     output_classify_to_csv(
-        save_dir=Debug.debug_path.classify_dir_path
+        save_dir=Debug.debug_path.classify_dir_path,
+        time_str=date_time
+    )
+
+    output_canteen(
+        save_dir=Debug.debug_path.classify_dir_path,
+        time_str=date_time
     )
