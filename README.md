@@ -34,7 +34,7 @@ webdriver_manager>=4.0.0
 ### 使用说明
 
 1. 安装依赖
-2. 在本目录的父目录中创建一个文件，名为`shmtu_num_pwd.numpwd`,配置请参考`template/shmtu_num_pwd.numpwd`
+2. 请修改`template/shmtu_num_pwd.numpwd`中内容。
 3. 运行`main.py`，输入验证码，等待程序自动运行
 
 ## 校园卡消费分析工具
