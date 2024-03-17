@@ -4,9 +4,12 @@
 
 # 说明
 
-由于作者([Haomin Kong](https://github.com/a645162))
+由于我([Haomin Kong](https://github.com/a645162))
 开发了一个上海海事大学统一认证平台登录+验证码识别工具
 ([SHMTU_CAS](https://github.com/a645162/SHMTU_CAS))
+能够只输入学号+密码就可以自动获取账单，无需手动输入验证码，
+这就让实时获取账单成为可能，并且当检测到出现新的消费记录可以进行提醒，
+
 因此我将不会继续维护此项目。
 
 **画个饼：**
@@ -73,3 +76,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 本项目启动于 2023年10月6日 ，由于我也就是2023年9月9日才来，
 所以，有很多消费类型我没体验过。欢迎反馈！
 肯定有程序识别不出来的项目！
+
+### 项目缺点
+
+- 文档不完整
+- 使用Selenium，需要安装WebDriver
+- 使用Selenium4可能因为网络问题无法下载WebDriver
+- 需要手动打码
+- Python使用门槛高
+
+因此，我决定重写一个新版！
