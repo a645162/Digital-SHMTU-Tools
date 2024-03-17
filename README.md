@@ -44,7 +44,7 @@ webdriver_manager>=4.0.0
 程序需要 selenium 分析网页，
 需要webdriver_manager自动获取webdriver！
 
-### 使用说明
+### 账单导出工具-使用说明
 
 1. 安装依赖
 2. 请复制`template/shmtu_num_pwd.txt`到`template/shmtu_num_pwd.ini`
@@ -61,6 +61,17 @@ webdriver_manager>=4.0.0
 - 合并连续地洗浴记录(比如中途拔卡暂停)
 - 食堂用餐时段显示
 - 食堂用餐地点显示
+
+## 账单分析工具-使用说明(待补充)
+
+修改`BillAnalysis/bill_analysis.py`中的
+`main`函数中的`csv_path`变量为
+你使用本工具导出的账单的csv文件路径。
+
+```python
+if __name__ == '__main__':
+    csv_path = ""
+```
 
 ## 切换浏览器
 

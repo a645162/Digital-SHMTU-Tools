@@ -296,7 +296,12 @@ def output_canteen(save_dir, time_str):
 
 
 if __name__ == '__main__':
-    analysis_csv(Debug.debug_path.csv_path)
+    csv_path = ""
+
+    if (csv_path) == 0:
+        csv_path = Debug.debug_path.csv_path
+
+    analysis_csv(csv_path)
     print(field_dict)
 
     # 合并相邻的洗浴记录
