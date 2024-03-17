@@ -1,15 +1,25 @@
-# 上海海事大学的一些小工具
+# 上海海事大学 账单工具 v1.0
 
-上海海事大学的一些小工具。
-Some tools for shmtu student!
+上海海事大学 账单工具 v1.0
 
 # 说明
 
-所有工具应该同时支持所有平台！
+由于作者([Haomin Kong](https://github.com/a645162))
+开发了一个上海海事大学统一认证平台登录+验证码识别工具
+([SHMTU_CAS](https://github.com/a645162/SHMTU_CAS))
+因此我将不会继续维护此项目。
+
+**画个饼：**
+
+准备使用Qt6 + C++重写一个跨平台的桌面版工具(不仅仅是账单分析)。
+
+[a645162/SHMTU-Terminal-Qt](https://github.com/a645162/SHMTU-Terminal-Qt)
+
+已经新建文件夹了嗷！！！
 
 # 工具(功能)列表
 
-- 统一身份认证登录
+- 统一身份认证登录(需要手动打码)
 - 校园卡消费清单导出工具
 - 校园卡消费分析工具
 
@@ -19,7 +29,7 @@ Some tools for shmtu student!
 
 您登录(您只需要手动输入验证码)之后可以自动爬取您的消费清单，并且导出为csv文件。
 
-可以用Excel/WPS直接打开，或者可以期待一下我的分析工具！
+可以用Excel/WPS直接打开！
 
 ### 安装要求
 
@@ -34,31 +44,32 @@ webdriver_manager>=4.0.0
 ### 使用说明
 
 1. 安装依赖
-2. 请修改`template/shmtu_num_pwd.numpwd`中内容。
-3. 运行`main.py`，输入验证码，等待程序自动运行
+2. 请复制`template/shmtu_num_pwd.txt`到`template/shmtu_num_pwd.ini`
+3. 请修改`template/shmtu_num_pwd.ini`中内容。
+4. 运行`main.py`，输入验证码，等待程序自动运行
 
 ## 校园卡消费分析工具
+
+请参考`BillAnalysis`目录中的实现。
 
 ### 支持的功能
 
 - 对账单进行分类
-- 合并连续地洗浴记录
+- 合并连续地洗浴记录(比如中途拔卡暂停)
 - 食堂用餐时段显示
 - 食堂用餐地点显示
 
-### 画个饼
+## 切换浏览器
 
-- 做个图表
-- 能够生成PDF
-- 做个GUI
+将下面两行代码切换为其他浏览器，如Edge或者Firefox(GeckoDriver)
+
+```python
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+```
 
 ### 声明！
 
-本项目启动于 2023年10月6日 ，由于我也就是9月9日才来，
+本项目启动于 2023年10月6日 ，由于我也就是2023年9月9日才来，
 所以，有很多消费类型我没体验过。欢迎反馈！
-肯定有程序识别不出来的东西！
-
-# 画个饼
-
-- 做一个网站推送到钉钉的工具，可以挂在服务器(树莓派)上
-- 做一个GUI
+肯定有程序识别不出来的项目！

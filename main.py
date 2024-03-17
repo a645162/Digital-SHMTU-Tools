@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     # 读取配置文件
     config = configparser.ConfigParser()
-    config.read(r"template/shmtu_num_pwd.numpwd")
+    config.read(r"template/shmtu_num_pwd.ini")
 
     # 读取账号密码
     user_id = config["User"]["id"]
