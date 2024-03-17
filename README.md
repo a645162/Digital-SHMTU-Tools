@@ -65,12 +65,15 @@ webdriver_manager>=4.0.0
 ## 账单分析工具-使用说明(待补充)
 
 修改`BillAnalysis/bill_analysis.py`中的
-`main`函数中的`csv_path`变量为
-你使用本工具导出的账单的csv文件路径。
+`main`函数中的`csv_path`变量以及`output_dir`变量。
+
+- `csv_path`修改为你使用本工具导出的账单的csv文件路径。
+- `output_dir`修改为要输出的目录。
 
 ```python
 if __name__ == '__main__':
     csv_path = ""
+    output_dir = ""
 ```
 
 ## 切换浏览器
