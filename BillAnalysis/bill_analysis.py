@@ -315,7 +315,16 @@ def output_canteen(save_dir, time_str):
 
 
 if __name__ == '__main__':
-    analysis_csv(Debug.debug_path.csv_path)
+    csv_path = ""
+    output_dir = ""
+
+    if len(csv_path) == 0:
+        csv_path = Debug.debug_path.csv_path
+
+    if len(output_dir) == 0:
+        output_dir = Debug.debug_path.classify_dir_path
+
+    analysis_csv(csv_path)
     print(field_dict)
 
     # 合并相邻的洗浴记录
@@ -328,12 +337,12 @@ if __name__ == '__main__':
     print("当前时间 ", date_time)
     # 输出每一个分类到csv文件
     output_classify_to_csv(
-        save_dir=Debug.debug_path.classify_dir_path,
+        save_dir=output_dir,
         time_str=date_time
     )
 
     output_canteen(
-        save_dir=Debug.debug_path.classify_dir_path,
+        save_dir=output_dir,
         time_str=date_time
     )
 

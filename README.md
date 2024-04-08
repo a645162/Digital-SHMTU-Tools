@@ -1,15 +1,28 @@
-# 上海海事大学的一些小工具
+# 上海海事大学 账单工具 v1.0
 
-上海海事大学的一些小工具。
-Some tools for shmtu student!
+上海海事大学 账单工具 v1.0
 
 # 说明
 
-所有工具应该同时支持所有平台！
+由于我([Haomin Kong](https://github.com/a645162))
+开发了一个上海海事大学统一认证平台登录+验证码识别工具
+([SHMTU_CAS](https://github.com/a645162/SHMTU_CAS))
+能够只输入学号+密码就可以自动获取账单，无需手动输入验证码，
+这就让实时获取账单成为可能，并且当检测到出现新的消费记录可以进行提醒，
+
+因此我将不会继续维护此项目。
+
+**画个饼：**
+
+准备使用Qt6 + C++重写一个跨平台的桌面版工具(不仅仅是账单分析)。
+
+[a645162/SHMTU-Terminal-Qt](https://github.com/a645162/SHMTU-Terminal-Qt)
+
+已经新建文件夹了嗷！！！
 
 # 工具(功能)列表
 
-- 统一身份认证登录
+- 统一身份认证登录(需要手动打码)
 - 校园卡消费清单导出工具
 - 校园卡消费分析工具
 
@@ -19,7 +32,7 @@ Some tools for shmtu student!
 
 您登录(您只需要手动输入验证码)之后可以自动爬取您的消费清单，并且导出为csv文件。
 
-可以用Excel/WPS直接打开，或者可以期待一下我的分析工具！
+可以用Excel/WPS直接打开！
 
 ### 安装要求
 
@@ -31,34 +44,59 @@ webdriver_manager>=4.0.0
 程序需要 selenium 分析网页，
 需要webdriver_manager自动获取webdriver！
 
-### 使用说明
+### 账单导出工具-使用说明
 
 1. 安装依赖
-2. 在本目录的父目录中创建一个文件，名为`shmtu_num_pwd.numpwd`,配置请参考`template/shmtu_num_pwd.numpwd`
-3. 运行`main.py`，输入验证码，等待程序自动运行
+2. 请复制`template/shmtu_num_pwd.txt`到`template/shmtu_num_pwd.ini`
+3. 请修改`template/shmtu_num_pwd.ini`中内容。
+4. 运行`main.py`，输入验证码，等待程序自动运行
 
 ## 校园卡消费分析工具
+
+请参考`BillAnalysis`目录中的实现。
 
 ### 支持的功能
 
 - 对账单进行分类
-- 合并连续地洗浴记录
+- 合并连续地洗浴记录(比如中途拔卡暂停)
 - 食堂用餐时段显示
 - 食堂用餐地点显示
 
-### 画个饼
+## 账单分析工具-使用说明(待补充)
 
-- 做个图表
-- 能够生成PDF
-- 做个GUI
+修改`BillAnalysis/bill_analysis.py`中的
+`main`函数中的`csv_path`变量以及`output_dir`变量。
+
+- `csv_path`修改为你使用本工具导出的账单的csv文件路径。
+- `output_dir`修改为要输出的目录。
+
+```python
+if __name__ == '__main__':
+    csv_path = ""
+    output_dir = ""
+```
+
+## 切换浏览器
+
+将下面两行代码切换为其他浏览器，如Edge或者Firefox(GeckoDriver)
+
+```python
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+```
 
 ### 声明！
 
-本项目启动于 2023年10月6日 ，由于我也就是9月9日才来，
+本项目启动于 2023年10月6日 ，由于我也就是2023年9月9日才来，
 所以，有很多消费类型我没体验过。欢迎反馈！
-肯定有程序识别不出来的东西！
+肯定有程序识别不出来的项目！
 
-# 画个饼
+### 项目缺点
 
-- 做一个网站推送到钉钉的工具，可以挂在服务器(树莓派)上
-- 做一个GUI
+- 文档不完整
+- 使用Selenium，需要安装WebDriver
+- 使用Selenium4可能因为网络问题无法下载WebDriver
+- 需要手动打码
+- Python使用门槛高
+
+因此，我决定重写一个新版！
