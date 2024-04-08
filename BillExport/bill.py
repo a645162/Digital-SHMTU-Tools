@@ -1,9 +1,11 @@
 import os.path
 from datetime import datetime
+import csv
 
 from selenium.webdriver.common.by import By
 
 from Utils import path
+from Database.Bill import SaveJson
 
 url_ecard = r"https://ecard.shmtu.edu.cn/epay/"
 
@@ -127,14 +129,12 @@ def get_bill(driver, save_path):
     csv_file = \
         open(file_path, 'w', newline='', encoding='utf-8')
 
-    import csv
-
-    column = [
-        "date", "time", "name", "num",
-        "target", "money", "pay_type", "status"
-    ]
+    # column = [
+    #     "date", "time", "name", "num",
+    #     "target", "money", "pay_type", "status"
+    # ]
     writer = csv.writer(csv_file)
-    writer.writerow(column)
+    writer.writerow(SaveJson.csv_column)
     for data in list_consumption:
         writer.writerow(data)
     csv_file.close()
