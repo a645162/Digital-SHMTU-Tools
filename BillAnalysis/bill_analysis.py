@@ -1,9 +1,8 @@
 import os
 import csv
-import time
 import datetime
+from collections import defaultdict
 
-import Debug.debug_path
 from Database.Bill import ReadDatabase, SaveJson
 from Database.Bill import canteen_config, bath_config, output_config
 from Utils import path
@@ -140,11 +139,29 @@ def handle_canteen():
                         break
                 if found:
                     break
+        if not found:
+            new_canteen_record["timetable"] = "未知"
+            print(new_canteen_record["str_time"], "未知时间段，请在github反馈给开发者！")
 
         new_canteen_list.append(new_canteen_record)
         classify_dict["canteen"] = new_canteen_list
 
     print("食堂处理完毕！")
+
+
+def analysis_canteen(save_dir, time_str):
+    save_time_dir = os.path.join(save_dir, time_str)
+    file_name = "canteen_analysis_{}.csv".format(time_str)
+    file_path = os.path.join(save_time_dir, file_name)
+    path.create_dir_if_not_exist(save_time_dir)
+
+    # 按 str_date 分组，也就是按日期分配记录
+    canteen_dict_list = classify_dict["canteen"]
+    groups_by_date = defaultdict(list)
+    for item in canteen_dict_list:
+        groups_by_date[item['str_date']].append(item)
+
+    print()
 
 
 def judge_bath_record(record1, record2):
@@ -296,14 +313,8 @@ def output_canteen(save_dir, time_str):
 
 
 if __name__ == '__main__':
-    csv_path = ""
-    output_dir = ""
-
-    if len(csv_path) == 0:
-        csv_path = Debug.debug_path.csv_path
-
-    if len(output_dir) == 0:
-        output_dir = Debug.debug_path.classify_dir_path
+    csv_path = "../workdir/bills/consumption_2024-01-12_19-37-04.csv"
+    output_dir = "../workdir/bills/classify"
 
     analysis_csv(csv_path)
     print(field_dict)
@@ -323,6 +334,11 @@ if __name__ == '__main__':
     )
 
     output_canteen(
+        save_dir=output_dir,
+        time_str=date_time
+    )
+
+    analysis_canteen(
         save_dir=output_dir,
         time_str=date_time
     )
